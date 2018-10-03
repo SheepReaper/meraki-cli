@@ -1,0 +1,14 @@
+environment:
+  NugetApiKey:
+    secure: 25zAt3homYtd2HRxEuvCg1XablIlWzSjS4hpK3SwBqh3JjZ4H+GrAzzRa1Oj9hmA
+
+os: WMF 5
+
+# Skip on Readme updates
+skip_commits:
+  message: /updated readme.*|update readme.*s/
+
+build: false
+
+test_script:
+  - ps: . .\build.ps1
