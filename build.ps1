@@ -10,7 +10,7 @@ Install-Module -Name Pester -Force -SkipPublisherCheck
 
 Import-Module Psake, BuildHelpers
 
-Set-BuildEnvironment
+Set-BuildEnvironment -Path .\src
 
 Invoke-psake -buildFile .\psake.ps1 -taskList $Task -nologo
 
