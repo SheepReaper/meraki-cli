@@ -1,3 +1,5 @@
+version: alpha-ci{build}
+
 environment:
   NugetApiKey:
     secure: 25zAt3homYtd2HRxEuvCg1XablIlWzSjS4hpK3SwBqh3JjZ4H+GrAzzRa1Oj9hmA
