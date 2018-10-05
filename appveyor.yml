@@ -15,5 +15,5 @@ build: false
 test_script:
   - ps: . .\build.ps1
 
-deploy_script:
-  - ps: . .\build.ps1 -Task 'Deploy'
+#deploy_script:
+#  - ps: . .\build.ps1 -Task 'Deploy'
