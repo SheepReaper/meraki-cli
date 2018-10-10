@@ -13,7 +13,14 @@ skip_commits:
 build: false
 
 test_script:
-  - ps: . .\build.ps1
+# Test native PS
+  - ps: . .\tests\appveyor.tests.ps1
+
+# Test with PS 2 (Lol, not really, does anyone still use this?)
+#  - ps: powershell.exe -version 2.0 -executionpolicy bypass -noprofile -file .\tests\appveyor.tests.ps1
+
+# Collect artifacts
+  - ps: . .\tests\appveyor.tests.ps1 -Finalize
 
 #deploy_script:
 #  - ps: . .\build.ps1 -Task 'Deploy'
