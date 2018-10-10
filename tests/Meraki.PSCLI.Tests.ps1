@@ -4,8 +4,8 @@ if(-not $PSScriptRoot){
 
 $psVersion = $PSVersionTable.PSVersion.Major
 
-$projectRoot = Resolve-Path "$PSScriptRoot\.."
-$moduleRoot = Split-Path $(Resolve-Path "$projectRoot\*\*.psm1") 
+$projectRoot = Resolve-Path $PSScriptRoot
+$moduleRoot = Split-Path (Resolve-Path "$projectRoot\*\*.psm1") 
 $moduleName = Split-Path $moduleRoot -Leaf
 
 Describe "General project validation: $moduleName" {
