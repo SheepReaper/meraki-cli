@@ -1,4 +1,4 @@
-version: alpha-ci{build}
+#version: alpha-ci{build}
 
 environment:
   NugetApiKey:
