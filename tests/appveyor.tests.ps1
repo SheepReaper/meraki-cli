@@ -3,7 +3,7 @@ param([switch]$Finalize)
 # Globals
 $psVersion = $PSVersionTable.PSVersion.Major
 $testFile = "TestResultsPS$psVersion.xml"
-$projectRoot = $ENV:APPVEYOR_BUILD_DIR
+$projectRoot = $ENV:APPVEYOR_BUILD_FOLDER
 
 Set-Location $projectRoot
 
