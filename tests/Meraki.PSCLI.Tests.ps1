@@ -41,7 +41,7 @@ Describe "$ModuleName PS$PSVersion" {
             $Module = @( Get-Module $ModuleName )
             $Module.Name -contains $ModuleName | Should be $True
             $Commands = $Module.ExportedCommands.Keys
-            $Commands -contains 'Get-BuildVariables' | Should Be $True
+            $Commands -contains 'Set-MerakiApiKey' | Should Be $True
         }
     }
 }
