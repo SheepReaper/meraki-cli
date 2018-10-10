@@ -1,20 +1,25 @@
-if(-not $PSScriptRoot){
+if (-not $PSScriptRoot) {
     $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Definition -Parent
 }
 
-$psVersion = $PSVersionTable.PSVersion.Major
+$PSVersion = $PSVersionTable.PSVersion.Major
+$ModuleName = $ENV:BHProjectName
 
-$projectRoot = Resolve-Path $PSScriptRoot
-$moduleRoot = Split-Path (Resolve-Path "$projectRoot\*\*.psm1") 
-$moduleName = Split-Path $moduleRoot -Leaf
+# Verbose output for non-master builds on appveyor
+# Handy for troubleshooting.
+# Splat @Verbose against commands as needed (here or in pester tests)
+$Verbose = @{}
+if ($ENV:BHBranchName -notlike "master" -or $env:BHCommitMessage -match "!verbose") {
+    $Verbose.add("Verbose", $True)
+}
 
-Describe "General project validation: $moduleName" {
+Describe "General project validation: $ModuleName" {
 
-    $scripts = Get-ChildItem $projectRoot -Include *.ps1, *.psm1, *.psd1 -Recurse
+    $scripts = Get-ChildItem $PSScriptRoot -Include *.ps1, *.psm1, *.psd1 -Recurse
 
     # TestCases are splatted to the script so we need hashtables
     $testCase = $scripts | Foreach-Object {@{file = $_}}         
-    It "Script <file> should be valid powershell (PS$psVersion)" -TestCases $testCase {
+    It "Script <file> should be valid powershell (PS$PSVersion)" -TestCases $testCase {
         param($file)
 
         $file.fullname | Should Exist
@@ -24,8 +29,19 @@ Describe "General project validation: $moduleName" {
         $null = [System.Management.Automation.PSParser]::Tokenize($contents, [ref]$errors)
         $errors.Count | Should Be 0
     }
+}
 
-    It "Module '$moduleName' can import cleanly (PS$psVersion)" {
-        {Import-Module (Join-Path $moduleRoot "$moduleName.psm1") -force } | Should Not Throw
+Describe "$ModuleName PS$PSVersion" {
+    Context 'Strict mode' {
+
+        Set-StrictMode -Version latest
+
+        It 'Should load' {
+            Import-Module $PSScriptRoot\..\$ModuleName -Force
+            $Module = @( Get-Module $ModuleName )
+            $Module.Name -contains $ModuleName | Should be $True
+            $Commands = $Module.ExportedCommands.Keys
+            $Commands -contains 'Get-BuildVariables' | Should Be $True
+        }
     }
 }
