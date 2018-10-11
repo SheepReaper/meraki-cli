@@ -1,4 +1,4 @@
-version: alpha-ci{build}
+version: 1.0.0-ci{build}
 
 environment:
   NugetApiKey:
@@ -13,7 +13,5 @@ skip_commits:
 build: false
 
 test_script:
-  - ps: . .\build.ps1
-
-#deploy_script:
-#  - ps: . .\build.ps1 -Task 'Deploy'
+# Test native PS
+  - ps: . .\build\Start-Build.ps1 -Task Deploy
