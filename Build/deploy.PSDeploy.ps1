@@ -21,7 +21,7 @@
 if (
     $env:BHPSModulePath -and
     $env:BHBuildSystem -ne 'Unknown' -and
-    ($env:BHBranchName -eq "master" -or $env:BHBranchName -eq "pre-release-test") -and
+    ($env:BHBranchName -eq "master" -or $env:BHBranchName -eq "pre-release") -and
     $env:BHCommitMessage -match '!deploy'
 ) {
     Deploy Module {
