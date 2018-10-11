@@ -67,7 +67,7 @@ Task Build -Depends Test {
         }
 
         if($env:BHBranchName -like "pre-release" -or $env:BHBranchName -like "pre-release-test"){
-            Update-Metadata -PropertyName Prerelease -Value "dev"
+            Update-Metadata -Path $env:BHPSModuleManifest -PropertyName Prerelease -Value "dev"
         }
     }
     Catch {
