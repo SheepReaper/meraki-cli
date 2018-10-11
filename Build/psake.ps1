@@ -65,6 +65,10 @@ Task Build -Depends Test {
         if ($GalleryVersion -ge $GithubVersion) {
             Update-Metadata -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -Value $GalleryVersion -ErrorAction stop
         }
+
+        if($env:BHBranchName -like "pre-release" -or $env:BHBranchName -like "pre-release-test"){
+            Update-Metadata -PropertyName Prerelease -Value "dev"
+        }
     }
     Catch {
         "Failed to update version for '$env:BHProjectName': $_.`nContinuing with existing version"
