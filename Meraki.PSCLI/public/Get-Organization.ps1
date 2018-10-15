@@ -1,4 +1,4 @@
-function Get-MerakiOrganization {
+function Get-Organization {
     [CmdletBinding()]
     param([string]$Id)
 

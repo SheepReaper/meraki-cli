@@ -21,7 +21,7 @@
 if (
     $env:BHPSModulePath -and
     $env:BHBuildSystem -ne 'Unknown' -and
-    ($env:BHBranchName -eq "master" -or $env:BHBranchName -eq "pre-release") -and
+    #($env:BHBranchName -eq "master" -or $env:BHBranchName -eq "pre-release") -and
     $env:BHCommitMessage -match '!deploy'
 ) {
     Deploy Module {
@@ -38,7 +38,7 @@ else {
     "Skipping deployment: To deploy, ensure that...`n" +
     "`t* ENV:BHModulePath is set (Current [$([bool]$env:BHPSModulePath)]: $ENV:BHPSModulePath)`n" +
     "`t* You are in a known build system (Current [$($env:BHBuildSystem -ne 'Unknown')]: $ENV:BHBuildSystem)`n" +
-    "`t* You are committing to the master or pre-release branches (Current [$($env:BHBranchName -eq "master" -or $env:BHBranchName -eq "pre-release")]: $ENV:BHBranchName) `n" +
+    #"`t* You are committing to the master or pre-release branches (Current [$($env:BHBranchName -eq "master" -or $env:BHBranchName -eq "pre-release")]: $ENV:BHBranchName) `n" +
     "`t* Your commit message includes !deploy (Current [$($env:BHCommitMessage -match '!deploy')]: $ENV:BHCommitMessage)" |
         Write-Host
 }
