@@ -4,18 +4,19 @@ if (-not $PSScriptRoot) {
 
 $PSVersion = $PSVersionTable.PSVersion.Major
 $ModuleName = $ENV:BHProjectName
+$ProjectRoot = $ENV:BHProjectPath
 
 # Verbose output for non-master builds on appveyor
 # Handy for troubleshooting.
 # Splat @Verbose against commands as needed (here or in pester tests)
 $Verbose = @{}
-if ($ENV:BHBranchName -notlike "master" -or $env:BHCommitMessage -match "!verbose") {
+if ($ENV:BHBranchName -notlike "release" -or $env:BHCommitMessage -match "!verbose") {
     $Verbose.add("Verbose", $True)
 }
 
 Describe "General project validation: $ModuleName" {
 
-    $scripts = Get-ChildItem $PSScriptRoot -Include *.ps1, *.psm1, *.psd1 -Recurse
+    $scripts = Get-ChildItem $ProjectRoot -Include *.ps1, *.psm1, *.psd1 -Recurse
 
     # TestCases are splatted to the script so we need hashtables
     $testCase = $scripts | Foreach-Object {@{file = $_}}         
@@ -37,7 +38,7 @@ Describe "$ModuleName PS$PSVersion" {
         Set-StrictMode -Version latest
 
         It 'Should load' {
-            Import-Module $PSScriptRoot\..\$ModuleName -Force
+            Import-Module $ProjectRoot\$ModuleName -Force
             $Module = @( Get-Module $ModuleName )
             $Module.Name -contains $ModuleName | Should be $True
             $Commands = $Module.ExportedCommands.Keys
