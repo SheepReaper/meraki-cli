@@ -71,7 +71,7 @@ Task Build -Depends Test {
             default { "dev" }
         }
         if ($suffix) {
-            Update-Metadata -Path $env:BHPSModuleManifest -PropertyName Prerelease -Value "dev"
+            Update-Metadata -Path $env:BHPSModuleManifest -PropertyName Prerelease -Value $suffix
         }
     }
     Catch {
