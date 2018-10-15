@@ -68,7 +68,7 @@ Task Build -Depends Test {
 
         $suffix = switch ($ENV:BHBranchName) {
             "pre-release" { "pre" }
-            default { "dev" }
+            default { "dev$ENV:APPVEYOR_BUILD_NUMBER" }
         }
         if ($suffix) {
             Update-Metadata -Path $env:BHPSModuleManifest -PropertyName Prerelease -Value $suffix
