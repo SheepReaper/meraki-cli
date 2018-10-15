@@ -13,7 +13,7 @@ Properties {
     $lines = '----------------------------------------------------------------------'
 
     $Verbose = @{}
-    if ($ENV:BHCommitMessage -match "!verbose") {
+    if ($env:BHBranchName -ine "release" -or $ENV:BHCommitMessage -match "!verbose") {
         $Verbose = @{Verbose = $True}
     }
 }
@@ -66,7 +66,11 @@ Task Build -Depends Test {
             Update-Metadata -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -Value $GalleryVersion -ErrorAction stop
         }
 
-        if($env:BHBranchName -like "pre-release" -or $env:BHBranchName -like "pre-release-test"){
+        $suffix = switch ($ENV:BHBranchName) {
+            "pre-release" { "pre" }
+            default { "dev" }
+        }
+        if ($suffix) {
             Update-Metadata -Path $env:BHPSModuleManifest -PropertyName Prerelease -Value "dev"
         }
     }
