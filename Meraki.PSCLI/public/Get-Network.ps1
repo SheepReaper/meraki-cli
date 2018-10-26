@@ -1,39 +1,82 @@
 function Get-Network {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = "GetAllInfer")]
     param(
-        [Parameter(ValueFromPipelineByPropertyName = $true, ValueFromPipeline = $true)]
-        [string]$Id = $env:MerakiOrganizationId,
-        [Parameter(ValueFromPipeline = $true)]
-        [PSCustomObject[]]$InputObject
+        [Parameter(Mandatory = $true,
+            ParameterSetName = "GetOne",
+            ValueFromPipelineByPropertyName = $true
+        )]
+        [string]$NetworkId,
+        [Parameter(Mandatory = $true,
+            ParameterSetName = "GetAll",
+            ValueFromPipelineByPropertyName = $true
+        )]
+        [string]$OrganizationId,
+        [Parameter(Mandatory = $true,
+            ParameterSetName = "ParseInput",
+            Position = 0,
+            ValueFromPipelineByPropertyName = $true
+        )]
+        [string]$Id,
+        [Parameter(Mandatory = $true,
+            ParameterSetName = "GetAllGlobal")]
+        [switch]$AllOrganizations
     )
     Begin {
         try {
-            [string]$uri = $endpoint
+            [string]$baseUri = $endpoint
+
+            switch ($PSCmdlet.ParameterSetName) {
+                GetOne {
+                    $Id = $NetworkId
+                    break
+                }
+                GetAll {
+                    $Id = $OrganizationId
+                    break
+                }
+                GetAllInfer {
+                    if ($env:MerakiOrganizationId) {
+                        $Id = $env:MerakiOrganizationId
+                    }
+                    else {
+                        Write-Error -Exception ([System.Management.Automation.PSArgumentNullException]::new()) `
+                            -Message "The OrganizationId parameter was attempted to be inferred from `$env:MerakiOrganizationId but was `$null" `
+                            -ErrorAction Stop
+                    }
+                }
+            }
         }
         catch {$PSCmdlet.ThrowTerminatingError($PSitem)}
     }
     Process {
         try {
-            if ($Id) {
+            if ($PSCmdlet.ParameterSetName -eq "GetOne" `
+                    -or $PSCmdlet.ParameterSetName -eq "ParseInput") {
                 if ($Id.Contains("_")) {
-                    $uri = "$uri/networks/$Id"
+                    $uri = "$baseUri/networks/$Id"
+                    [PSCustomObject](Invoke-RestMethod -Method GET -Uri $uri -Headers $headers)
                 }
                 else {
-                    $uri = "$uri/organizations/$Id/networks"
+                    Get-Network -OrganizationId $Id
                 }
             }
-            else {
-                if ($env:MerakiOrganizationId) {
-                    $uri = "$uri/organizations/$env:MerakiOrganizationId/networks"
-                }
-                else {
-                    Write-Error -Exception ([System.Management.Automation.PSArgumentException]::new()) `
-                        -Message "No Id was specified and `$env:\MerakiOrganizationId was not set." `
-                        -ErrorAction Stop
-                }
+        }
+        catch {
+            $PSCmdlet.ThrowTerminatingError($PSitem)
+        }
+    }
+    End {
+        try {
+            if ($PSCmdlet.ParameterSetName -eq "GetAllGlobal") {
+                Write-Error -Exception ([NotImplementedException]::new()) `
+                    -Message "The -AllOrganizations switch is not yet implemented" `
+                    -ErrorAction Stop
             }
-
-            return Invoke-RestMethod -Method GET -Uri $uri -Headers $headers
+            if ($PSCmdlet.ParameterSetName -match "GetAll") {
+                # Also matches GetAllInfer
+                $uri = "$baseUri/organizations/$Id/networks"
+                [PSCustomObject](Invoke-RestMethod -Method GET -Uri $uri -Headers $headers)
+            }
         }
         catch {
             $PSCmdlet.ThrowTerminatingError($PSitem)
