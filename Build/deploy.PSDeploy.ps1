@@ -18,11 +18,13 @@
 # * Set-BuildEnvironment from BuildHelpers module has populated ENV:BHModulePath and related variables
 
 # Publish to gallery with a few restrictions
+$authorizedBranches = @('psgallery-preview', 'psgallery-release')
+
 if (
     $env:BHPSModulePath -and
     $env:BHBuildSystem -ne 'Unknown' -and
-    #($env:BHBranchName -eq "master" -or $env:BHBranchName -eq "pre-release") -and
-    $env:BHCommitMessage -match '!deploy'
+    ($env:BHBranchName -iin $authorizedBranches) #-and
+    #$env:BHCommitMessage -match '!deploy'
 ) {
     Deploy Module {
         By PSGalleryModule {
@@ -38,9 +40,9 @@ else {
     "Skipping deployment: To deploy, ensure that...`n" +
     "`t* ENV:BHModulePath is set (Current [$([bool]$env:BHPSModulePath)]: $ENV:BHPSModulePath)`n" +
     "`t* You are in a known build system (Current [$($env:BHBuildSystem -ne 'Unknown')]: $ENV:BHBuildSystem)`n" +
-    #"`t* You are committing to the master or pre-release branches (Current [$($env:BHBranchName -eq "master" -or $env:BHBranchName -eq "pre-release")]: $ENV:BHBranchName) `n" +
-    "`t* Your commit message includes !deploy (Current [$($env:BHCommitMessage -match '!deploy')]: $ENV:BHCommitMessage)" |
-        Write-Host
+    "`t* You are committing to a psgallery branch (Current [$($env:BHBranchName -iin $authorizedBranches)]: $ENV:BHBranchName) `n" |
+        #"`t* Your commit message includes !deploy (Current [$($env:BHCommitMessage -match '!deploy')]: $ENV:BHCommitMessage)" |
+    Write-Host
 }
 
 # Publish to AppVeyor if we're in AppVeyor
@@ -48,6 +50,7 @@ if (
     $env:BHModulePath -and
     $env:BHBuildSystem -eq 'AppVeyor'
 ) {
+    Write-Host "Deploying CI dev build to Appveyor Feed"
     Deploy DeveloperBuild {
         By AppVeyorModule {
             FromSource $ENV:BHModulePath
