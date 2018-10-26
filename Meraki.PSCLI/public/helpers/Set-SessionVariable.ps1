@@ -1,4 +1,4 @@
-function Set-MerakiSessionVariable {
+function Set-SessionVariable {
     [CmdletBinding()]
     param([string]$ApiKey, $OrganizationId, $NetworkId)
 

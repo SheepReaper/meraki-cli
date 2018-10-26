@@ -13,7 +13,7 @@ Properties {
     $lines = '----------------------------------------------------------------------'
 
     $Verbose = @{}
-    if ($ENV:BHCommitMessage -match "!verbose") {
+    if ($env:BHBranchName -ine "psgallery-release") {
         $Verbose = @{Verbose = $True}
     }
 }
@@ -66,8 +66,14 @@ Task Build -Depends Test {
             Update-Metadata -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -Value $GalleryVersion -ErrorAction stop
         }
 
-        if($env:BHBranchName -like "pre-release" -or $env:BHBranchName -like "pre-release-test"){
-            Update-Metadata -Path $env:BHPSModuleManifest -PropertyName Prerelease -Value "dev"
+        if ($ENV:BHBranchName -ine "psgallery-release") {
+            if ($ENV:BHCommitMessage -imatch "!preview") {
+                $ENV:BHCommitMessage -match ".*!preview(?<number>\d*).*"
+                $number = $Matches['number']
+                $suffix = "pre$number"
+            }
+            else { $suffix = "dev$ENV:APPVEYOR_BUILD_NUMBER" }
+            Update-Metadata -Path $env:BHPSModuleManifest -PropertyName Prerelease -Value $suffix
         }
     }
     Catch {

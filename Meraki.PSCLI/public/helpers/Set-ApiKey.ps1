@@ -1,4 +1,4 @@
-function Set-MerakiApiKey {
+function Set-ApiKey {
     [CmdletBinding()]
     param(
         [Parameter(ValueFromPipeline = $true, Position = 1)]
