@@ -81,7 +81,21 @@ Task Build -Depends Test {
     }
 }
 
-Task Deploy -Depends Build {
+Task TestNotPR -Depends Build {
+    $lines
+    Write-Host "If this is a pull request, not deploying"
+
+    $isPR = if ($ENV:APPVEYOR_PULL_REQUEST_NUMBER -ne $null) {$true}
+
+    if ($isPR) {
+        Write-Error "This is a Pull request, breaking pipeline..."
+    }
+    else {
+        Write-Host "This is not a PR, ok to proceed."
+    }
+}
+
+Task Deploy -Depends TestNotPR {
     $lines
 
     $Params = @{
