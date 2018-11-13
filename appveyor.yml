@@ -9,7 +9,7 @@ image: WMF 5
 
 environment:
   NugetApiKey:
-    secure: Rb7VP0QMEu6ghUTRsYZZafvm/XPUr2+f8FgudevjPfDYDtqa49wm8lf5nOUlVsMW7KbB32bN0ssAICYBI2pPHV10Cmf+j2JnjJPy+a+sfpE=
+    secure: SCsk5PEaEapMuqNlMjyyE6VDV9hEsTQ20gmgb78mRzrkXM1WbO9Ls883RWr50gEz
 
 build: off
 
