@@ -1,17 +1,20 @@
 version: 1.0.0-ci{build}
 
+pull_requests:
+  do_not_increment_build_number: true
+
+skip_branch_with_pr: true
+
+image: WMF 5
+
 environment:
   NugetApiKey:
-    secure: 25zAt3homYtd2HRxEuvCg1XablIlWzSjS4hpK3SwBqh3JjZ4H+GrAzzRa1Oj9hmA
+    secure: Rb7VP0QMEu6ghUTRsYZZafvm/XPUr2+f8FgudevjPfDYDtqa49wm8lf5nOUlVsMW7KbB32bN0ssAICYBI2pPHV10Cmf+j2JnjJPy+a+sfpE=
 
-os: WMF 5
-
-# Skip on Readme updates
-skip_commits:
-  message: /updated readme.*|update readme.*s/
-
-build: false
+build: off
 
 test_script:
-# Test native PS
-  - ps: . .\build\Start-Build.ps1 -Task Deploy
+- ps: . .\build\Start-Build.ps1 -Task Deploy
+
+skip_commits:
+  message: /updated readme.*|update readme.*s/
