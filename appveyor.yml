@@ -5,7 +5,7 @@ pull_requests:
 
 skip_branch_with_pr: true
 
-image: WMF 5
+image: Visual Studio 2017
 
 environment:
   NugetApiKey:
