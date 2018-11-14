@@ -30,7 +30,7 @@ if (
     Write-Host "Deploying to PSGallery..."
     Deploy Module {
         By PSGalleryModule {
-            FromSource $env:BHModulePath
+            FromSource $ENV:BHProjectName
             To PSGallery
             WithOptions @{
                 ApiKey = $ENV:NugetApiKey
@@ -50,13 +50,13 @@ else {
 
 # Publish to AppVeyor if we're in AppVeyor
 if (
-    $env:BHModulePath -and
+    $env:BHProjectName -and $ENV:BHProjectName.Count -eq 1 -and
     $env:BHBuildSystem -eq 'AppVeyor'
 ) {
     Write-Host "Deploying CI dev build to Appveyor Feed"
     Deploy DeveloperBuild {
         By AppVeyorModule {
-            FromSource $ENV:BHModulePath
+            FromSource $ENV:BHProjectName
             To AppVeyor
             WithOptions @{
                 Version = $env:APPVEYOR_BUILD_VERSION
