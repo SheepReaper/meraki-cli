@@ -19,8 +19,6 @@
 
 # Publish to gallery with a few restrictions
 $authorizedBranches = @('psgallery-preview', 'psgallery-release')
-$ENV:NugetApiKey
-Write-Verbose ApiKey
 
 if (
     $env:BHModulePath -and
@@ -29,7 +27,6 @@ if (
     ($null -eq $ENV:APPVEYOR_PULL_REQUEST_NUMBER)
     #$env:BHCommitMessage -match '!deploy'
 ) {
-    [Net.ServicePointManager]::SecurityProtocol
     Deploy Module {
         By PSGalleryModule {
             FromSource $env:BHModulePath
@@ -55,7 +52,6 @@ if (
     $env:BHProjectName -and $ENV:BHProjectName.Count -eq 1 -and
     $env:BHBuildSystem -eq 'AppVeyor'
 ) {
-    [Net.ServicePointManager]::SecurityProtocol
     Deploy DeveloperBuild {
         By AppVeyorModule {
             FromSource $ENV:BHProjectName
