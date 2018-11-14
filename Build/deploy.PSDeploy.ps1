@@ -21,7 +21,7 @@
 $authorizedBranches = @('psgallery-preview', 'psgallery-release')
 
 if (
-    $env:BHPSModulePath -and
+    $env:BHModulePath -and
     $env:BHBuildSystem -ne 'Unknown' -and
     $env:BHBranchName -iin $authorizedBranches -and
     ($null -eq $ENV:APPVEYOR_PULL_REQUEST_NUMBER)
@@ -30,7 +30,7 @@ if (
     Write-Host "Deploying to PSGallery..."
     Deploy Module {
         By PSGalleryModule {
-            FromSource $ENV:BHPSModulePath
+            FromSource $env:BHModulePath
             To PSGallery
             WithOptions @{
                 ApiKey = $ENV:NugetApiKey
@@ -40,7 +40,7 @@ if (
 }
 else {
     "Skipping deployment: To deploy, ensure that...`n" +
-    "`t* ENV:BHModulePath is set (Current [$([bool]$env:BHPSModulePath)]: $ENV:BHPSModulePath)`n" +
+    "`t* ENV:BHModulePath is set (Current [$([bool]$env:BHModulePath)]: $env:BHModulePath)`n" +
     "`t* You are in a known build system (Current [$($env:BHBuildSystem -ne 'Unknown')]: $ENV:BHBuildSystem)`n" +
     "`t* This is not a Pull Request (Current [$($null -eq $ENV:APPVEYOR_PULL_REQUEST_NUMBER)]: PR #$ENV:APPVEYOR_PULL_REQUEST_NUMBER)`n" +
     "`t* You are committing to a psgallery branch (Current [$($env:BHBranchName -iin $authorizedBranches)]: $ENV:BHBranchName) `n" |
