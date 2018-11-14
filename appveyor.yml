@@ -5,11 +5,11 @@ pull_requests:
 
 skip_branch_with_pr: true
 
-image: WMF 5
+image: Visual Studio 2017
 
 environment:
   NugetApiKey:
-    secure: Rb7VP0QMEu6ghUTRsYZZafvm/XPUr2+f8FgudevjPfDYDtqa49wm8lf5nOUlVsMW7KbB32bN0ssAICYBI2pPHV10Cmf+j2JnjJPy+a+sfpE=
+    secure: wTEocyM7qLpwNatBDyoxXPOvj0cRnPsjoiKK1ntyvewf0O12F5IbDyvMhyDG/x60
 
 build: off
 

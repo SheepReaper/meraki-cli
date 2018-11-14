@@ -32,8 +32,14 @@ Task Test -Depends Init {
     $lines
     "`n`tSTATUS: Testing with PowerShell $PSVersion"
 
+    # Testing links on github requires >= tls 1.2
+    $SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
     # Gather test results. Store them in a variable and file
     $TestResults = Invoke-Pester -Path $ProjectRoot\Tests -PassThru -OutputFormat NUnitXml -OutputFile "$ProjectRoot\$TestFile"
+    
+    [Net.ServicePointManager]::SecurityProtocol = $SecurityProtocol
 
     # In Appveyor?  Upload our tests! #Abstract this into a function?
     If ($ENV:BHBuildSystem -eq 'AppVeyor') {

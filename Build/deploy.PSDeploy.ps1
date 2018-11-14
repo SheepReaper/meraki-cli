@@ -21,16 +21,15 @@
 $authorizedBranches = @('psgallery-preview', 'psgallery-release')
 
 if (
-    $env:BHPSModulePath -and
+    $env:BHModulePath -and
     $env:BHBuildSystem -ne 'Unknown' -and
     $env:BHBranchName -iin $authorizedBranches -and
     ($null -eq $ENV:APPVEYOR_PULL_REQUEST_NUMBER)
     #$env:BHCommitMessage -match '!deploy'
 ) {
-    Write-Host "Deploying to PSGallery..."
     Deploy Module {
         By PSGalleryModule {
-            FromSource $ENV:BHPSModulePath
+            FromSource $ENV:BHProjectName
             To PSGallery
             WithOptions @{
                 ApiKey = $ENV:NugetApiKey
@@ -40,7 +39,7 @@ if (
 }
 else {
     "Skipping deployment: To deploy, ensure that...`n" +
-    "`t* ENV:BHModulePath is set (Current [$([bool]$env:BHPSModulePath)]: $ENV:BHPSModulePath)`n" +
+    "`t* ENV:BHModulePath is set (Current [$([bool]$env:BHModulePath)]: $env:BHModulePath)`n" +
     "`t* You are in a known build system (Current [$($env:BHBuildSystem -ne 'Unknown')]: $ENV:BHBuildSystem)`n" +
     "`t* This is not a Pull Request (Current [$($null -eq $ENV:APPVEYOR_PULL_REQUEST_NUMBER)]: PR #$ENV:APPVEYOR_PULL_REQUEST_NUMBER)`n" +
     "`t* You are committing to a psgallery branch (Current [$($env:BHBranchName -iin $authorizedBranches)]: $ENV:BHBranchName) `n" |
@@ -50,13 +49,12 @@ else {
 
 # Publish to AppVeyor if we're in AppVeyor
 if (
-    $env:BHModulePath -and
+    $env:BHProjectName -and $ENV:BHProjectName.Count -eq 1 -and
     $env:BHBuildSystem -eq 'AppVeyor'
 ) {
-    Write-Host "Deploying CI dev build to Appveyor Feed"
     Deploy DeveloperBuild {
         By AppVeyorModule {
-            FromSource $ENV:BHModulePath
+            FromSource $ENV:BHProjectName
             To AppVeyor
             WithOptions @{
                 Version = $env:APPVEYOR_BUILD_VERSION
