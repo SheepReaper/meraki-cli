@@ -27,7 +27,6 @@ if (
     ($null -eq $ENV:APPVEYOR_PULL_REQUEST_NUMBER)
     #$env:BHCommitMessage -match '!deploy'
 ) {
-    Write-Host "Deploying to PSGallery..."
     Deploy Module {
         By PSGalleryModule {
             FromSource $ENV:BHProjectName
@@ -53,7 +52,6 @@ if (
     $env:BHProjectName -and $ENV:BHProjectName.Count -eq 1 -and
     $env:BHBuildSystem -eq 'AppVeyor'
 ) {
-    Write-Host "Deploying CI dev build to Appveyor Feed"
     Deploy DeveloperBuild {
         By AppVeyorModule {
             FromSource $ENV:BHProjectName
