@@ -9,7 +9,7 @@ image: Visual Studio 2017
 
 environment:
   NugetApiKey:
-    secure: SCsk5PEaEapMuqNlMjyyE6VDV9hEsTQ20gmgb78mRzrkXM1WbO9Ls883RWr50gEz
+    secure: wTEocyM7qLpwNatBDyoxXPOvj0cRnPsjoiKK1ntyvewf0O12F5IbDyvMhyDG/x60
 
 build: off
 
