@@ -18,4 +18,3 @@ test_script:
 
 skip_commits:
   message: /updated readme.*|update readme.*s/
-# 
