@@ -2,7 +2,7 @@
 # meraki-cli
 PowerShell implementation of Meraki Dashboard API (for a binary version of this, see here: https://github.com/bryan5989/SheepReaper.Meraki.DashboardApi.PowerShell) (__WIP!__)
 ## Latest version (stable)
-Found on [PSGallery](https://www.powershellgallery.com/packages/Meraki.PSCLI/1.0.0-dev)
+Found on [PSGallery](https://www.powershellgallery.com/packages/Meraki.PSCLI/)
 ## Latest version (ci build)
 Register the CI repository (only need to do once)
 ```PowerShell
