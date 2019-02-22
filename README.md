@@ -10,5 +10,5 @@ Register-PSRepository -Name MerakiCliUnstable -SourceLocation "https://ci.appvey
 ```
 Then simply install from that repository
 ```PowerShell
-Install-Module -Repository MerakiCliUnstable -Name Meraki.PSCLI -Force
+Install-Module -AllowPrerelease -Force -Repository MerakiCliUnstable -Name Meraki.PSCLI
 ```
